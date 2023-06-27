@@ -1,7 +1,7 @@
 # sirio-flask-react
 <h1>Sírio flask api with react typescript frontend project</h1>
 
-<h2> How to set up the back:</h2>
+<h2> How to set up the RESTFUL API :</h2>
 
 <p>Install <a href="https://www.python.org/" target="_blank">python</a></p>
 
@@ -50,6 +50,17 @@ flask --app main run
 
 ``` code
 FLASK_APP=main.py flask run
+```
+<p>Install the mysql connector:</p>
+
+``` code
+pip install mysql-connector-python
+```
+
+<p> Run the connection: </p>
+
+``` code
+python connection.py
 ```
 
 <p>Ready! </p>
