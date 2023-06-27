@@ -52,18 +52,19 @@ flask --app main run
 FLASK_APP=main.py flask run
 ```
 <p>Install the mysql connector:</p>
+<p> You can install other connectors, like postgres as you wish</p>
 
 ``` code
 pip install mysql-connector-python
 ```
 
-<p> Run the connection: </p>
+<p> Run/test the connection: </p>
 
 ``` code
 python connection.py
 ```
 
-<p>Ready! </p>
+<p>The dump of the database is at /dump folder. </p>
 
 <h2>How to set up the front:</h2>
 
