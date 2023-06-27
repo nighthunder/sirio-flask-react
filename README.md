@@ -58,10 +58,10 @@ FLASK_APP=main.py flask run
 pip install mysql-connector-python
 ```
 
-<p> Run/test the connection: </p>
+<p> Install Flask Alchemy ORM: </p>
 
 ``` code
-python connection.py
+pip install -U Flask-SQLAlchemy
 ```
 
 <p>The dump of the database is at /dump folder. </p>
@@ -78,7 +78,7 @@ npm --version
 
 <p>Enter in the react folder</p>
 
-<p>Install the dependencies:</p>
+<p>Install the node dependencies:</p>
 
 ``` code
 npm install
@@ -90,4 +90,4 @@ npm install
 npm start
 ```
 
-<p>The setup is ready! </p>
+<p>React is running! </p>

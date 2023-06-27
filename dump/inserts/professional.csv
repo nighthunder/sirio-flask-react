@@ -1,0 +1,7 @@
+id,type,situation,name,phone,email,updatedAt,createdAt
+1,1,ativo,"Maria Helena Halls","(11) 95905-7362",maria.helena@sirio.com.br,"0000-00-00 00:00:00","0000-00-00 00:00:00"
+2,2,inativo,"Juliana dos Anjos","(11) 98763-3466",juliana.anjos@sirio.com.br,"0000-00-00 00:00:00","0000-00-00 00:00:00"
+3,3,ativo,"Roberto dos Santos Vital","(11) 98763-3466",roberto.vital@sirio.com.br,"0000-00-00 00:00:00","0000-00-00 00:00:00"
+4,4,ativo,"Adriana Ferraz Albuquerque","(11) 98763-3466",adriana.ferraz@sirio.com.br,"0000-00-00 00:00:00","0000-00-00 00:00:00"
+5,5,inativo,"Eliz Socorro da Ajuda","(11) 98763-3466",eliz.socorro@sirio.com.br,"0000-00-00 00:00:00","0000-00-00 00:00:00"
+6,6,inativo,"Thiago Augusto da Silva","(11) 98763-3466",thiago.augusto@sirio.com.br,"0000-00-00 00:00:00","0000-00-00 00:00:00"

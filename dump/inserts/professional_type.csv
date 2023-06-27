@@ -1,0 +1,7 @@
+id,description,situation,updatedAt,createdAt
+1,Médico(a),ativo,"0000-00-00 00:00:00","0000-00-00 00:00:00"
+2,Enfermeiro(a),ativo,"0000-00-00 00:00:00","0000-00-00 00:00:00"
+3,Desenvolvedor(a),ativo,"0000-00-00 00:00:00","0000-00-00 00:00:00"
+4,Diretor(a),ativo,"0000-00-00 00:00:00","0000-00-00 00:00:00"
+5,"Auxiliar de limpeza",ativo,"0000-00-00 00:00:00","0000-00-00 00:00:00"
+6,Segurança,ativo,"0000-00-00 00:00:00","0000-00-00 00:00:00"
