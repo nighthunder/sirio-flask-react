@@ -1,0 +1,22 @@
+form, table{
+    margin-top: 25px;
+}
+
+th{
+    background-color: #eeeeee;
+    text-transform: uppercase;
+
+}
+
+th td{
+    font-weight: bold;
+    color: blue;
+}
+
+tr{
+    cursor: pointer;
+}
+
+tr:hover{
+    box-shadow: 1px 1px 1px solid #000;
+}

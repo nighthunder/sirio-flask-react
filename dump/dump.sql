@@ -36,10 +36,10 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `grafot76_sirio`.`user` (
   `id` INT NOT NULL,
   `type` INT NOT NULL,
+  `email` VARCHAR(45) NULL,
   `situation` VARCHAR(45) NULL,
   `name` VARCHAR(45) NULL,
   `phone` VARCHAR(45) NULL,
-  `email` VARCHAR(45) NULL,
   `updatedAt` DATETIME NULL,
   `createdAt` DATETIME NULL,
   PRIMARY KEY (`id`, `type`),

@@ -1,26 +1,23 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-
+import React, { useEffect, useState } from 'react';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
+import '../styles.css';
 interface Person {
-  id: number;
-  name: string;
-  situation: string;
-  type: string;
-  email: string
+    id: number;
+    name: string;
+    situation: string;
+    type: number | null;
+    email: string;
 }
 
-interface PeopleListProps {
-  people: Person[];
-}
-
-const ProfessionalList: React.FC = () => {
+const PeopleList: React.FC<Person> = ({name, situation, type, email}) => {
   const [people, setPeople] = useState<Person[]>([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   useEffect(() => {
     fetchPeople();
-    console.log("people", people);
-  }, []);
+    console.log("it fetched again")
+  }, [name, situation, type, email]);
 
   const fetchPeople = async () => {
     try {
@@ -31,32 +28,55 @@ const ProfessionalList: React.FC = () => {
       console.error('Error fetching people:', error);
     }
   };
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const paginatedPeople = people.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
   return (
-    <TableContainer component={Paper}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Nome</TableCell>
-            <TableCell>Tipo</TableCell>
-            <TableCell>Email</TableCell>
-            <TableCell>Situação</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {people.map((person) => (
-            <TableRow key={person.id}>
-              <TableCell>{person.id}</TableCell>
-              <TableCell>{person.name}</TableCell>
-              <TableCell>{person.type}</TableCell>
-              <TableCell>{person.email}</TableCell>
-              <TableCell>{person.situation}</TableCell>
+    <>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>Nome</TableCell>
+                <TableCell>Tipo</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Situação</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {paginatedPeople.map((person) => (
+              <TableRow key={person.id}>
+                <TableCell>{person.id}</TableCell>
+                <TableCell>{person.name}</TableCell>
+                <TableCell>{person.type}</TableCell>
+                <TableCell>{person.email}</TableCell>
+                <TableCell>{person.situation}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        component="div"
+        rowsPerPageOptions={[5, 10, 25]}
+        count={people.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </>
   );
 };
 
-export default ProfessionalList;
+export default PeopleList;
