@@ -34,7 +34,7 @@ python3 -m pip install --user virtualenv
 flask\Scripts\activate
 ```
 
-<p>On Mac/linux:</p>
+<p>On Mac/linux: </p>
 
 ``` code
 source flask/bin/activate
