@@ -91,3 +91,7 @@ npm start
 ```
 
 <p>React is running! </p>
+
+<h2>Testing</h2>
+
+<p>Tests weren't implemented yet but they would be using the pytest library!</p>
