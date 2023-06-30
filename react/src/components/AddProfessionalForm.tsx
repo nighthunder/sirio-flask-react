@@ -1,5 +1,5 @@
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
-import { TextField, FormControl, InputLabel, Select, MenuItem, Stack, Button } from '@mui/material';
+import { CircularProgress, TextField, FormControl, InputLabel, Select, MenuItem, Stack, Button } from '@mui/material';
 import ProfessionalList from './ProfessionalList';
 import '../styles.css';
 
@@ -13,16 +13,20 @@ interface Person {
   id: number;
   name: string;
   email: string;
+  phone: string;
   type: number | null;
   situation: string ;
 }
 
 const Form: React.FC = () => {
+  const [reloadKey, setReloadKey] = useState<number>(0);
   const [type, setType] = useState<ProfessionalType[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formData, setFormData] = useState<Person>({
     id: 1,
     name: '',
     email: '',
+    phone: '',
     situation: '',
     type: null
   });
@@ -66,6 +70,11 @@ const Form: React.FC = () => {
       if (response.ok) {
         // Handle successful response
         console.log('Form submitted successfully');
+        setIsLoading(true);
+        setReloadKey(prevKey => prevKey + 1);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, 1000); // 10 seconds
 
       } else {
         // Handle error response
@@ -99,6 +108,15 @@ const Form: React.FC = () => {
             </FormControl>
             <TextField
             variant="outlined"
+            id="phone" 
+            name="phone"
+            label="Telefone" 
+            InputLabelProps={{ shrink: true }}
+            sx={{ flex: '1' }}
+            onChange={(e) => handleChange(e)}
+            />
+            <TextField
+            variant="outlined"
             label="Email"
             id="email" 
             name="email"
@@ -110,7 +128,7 @@ const Form: React.FC = () => {
             <InputLabel id="type-situation">Situação</InputLabel>
             <Select id="situation" name="situation" labelId="type-situation" label="Situation" onChange={(e) => handleChange(e)}>
                 <MenuItem key="ativo" value="ativo">1 - ativo</MenuItem>
-                <MenuItem key="inativo" value="ativo">2 - inativo</MenuItem>
+                <MenuItem key="inativo" value="inativo">2 - inativo</MenuItem>
             </Select>
             </FormControl>
             <Button type="submit" variant="contained" color="primary" size="large" sx={{ flex: '1' }}>
@@ -118,7 +136,13 @@ const Form: React.FC = () => {
             </Button>
         </Stack>
         </form>
-        <ProfessionalList {...formData}></ProfessionalList>
+        {isLoading ? (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40vh'}}>
+            <CircularProgress />
+          </div>
+        ) : (
+          <ProfessionalList reloadKey={reloadKey}></ProfessionalList>
+        )}
     </>
   );
 };

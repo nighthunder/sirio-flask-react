@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import datetime
 from flask import Flask, request
 from flask import jsonify
 from flask_cors import CORS, cross_origin
@@ -29,27 +30,33 @@ db.init_app(app)
 class User(db.Model):
     id: int
     name: str
+    phone: str
     situation: str
     type: int
     email: str
+    createdAt: datetime.datetime
+    updatedAt: datetime.datetime
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name= db.Column(db.String, unique=True, nullable=False)
     situation = db.Column(db.String, nullable=False)
     type = db.Column(db.Integer, db.ForeignKey('professional_type.id'), nullable=False)
     email = db.Column(db.String)
+    phone = db.Column(db.String)
     createdAt = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updatedAt = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
-    def __init__(self, name, situation, type, email):
-        self.name = name
-        self.email = email
-        self.situation = situation
+    def __init__(self, type, name, phone, email, situation, createdAt = createdAt, updatedAt = updatedAt):
         self.type = type
         self.email = email
+        self.situation = situation
+        self.name = name
+        self.phone = phone
+        self.createdAt = createdAt
+        self.updatedAt = updatedAt
 
     def __repr__(self):
-        return '<User %r>' % self.description
+        return '<User %r>' % self.name
     
     def serialize(self):
         return {"id": self.id,
@@ -64,6 +71,8 @@ class ProfessionalType(db.Model):
     id: int
     situation: str
     description: str
+    createdAt: datetime.datetime
+    updatedAt: datetime.datetime
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     description = db.Column(db.String, unique=True, nullable=False)
@@ -71,9 +80,11 @@ class ProfessionalType(db.Model):
     createdAt = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updatedAt = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
-    def __init__(self, description, situation):
+    def __init__(self, description, situation, createdAt = createdAt, updatedAt = updatedAt):
         self.description = description
         self.situation = situation
+        self.updatedAt = updatedAt
+        self.createdAt = createdAt
 
     def __repr__(self):
         return '<ProfessionalType %r>' % self.description
@@ -97,9 +108,12 @@ def postProfessional():
     # Example: accessing a specific field in the JSON data
     name = data.get('name')
     email = data.get('email')
+    phone = data.get('phone')
     type = data.get('type')
     situation = data.get('situation')
-    me = User(name, situation, type, email)
+    createdAt = datetime.datetime.now()
+    updatedAt = datetime.datetime.now()
+    me = User(type, name, phone, email, situation, createdAt, updatedAt)
     db.session.add(me) 
     db.session.commit()
     return jsonify({'success': 'ok'})
@@ -107,4 +121,23 @@ def postProfessional():
 @app.route('/type',methods=['GET'])
 def getType():
     return  jsonify(ProfessionalType.query.all()) 
+
+@app.route('/type',methods=['POST'])
+@cross_origin(origin='*')
+def postType():
+    if request.headers['Content-Type'] != 'application/json':
+        return 'Invalid Content-Type', 400
+
+    data = request.get_json()
+    # Now you can access the data in the request body
+    
+    # Example: accessing a specific field in the JSON data
+    description = data.get('description')
+    situation = data.get('situation')
+    createdAt = datetime.datetime.now()
+    updatedAt = datetime.datetime.now()
+    me = ProfessionalType(description, situation, createdAt, updatedAt)
+    db.session.add(me) 
+    db.session.commit()
+    return jsonify({'success': 'ok'})
 

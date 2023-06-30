@@ -5,11 +5,15 @@ interface Person {
     id: number;
     name: string;
     situation: string;
+    phone: string;
     type: number | null;
     email: string;
 }
-
-const PeopleList: React.FC<Person> = ({name, situation, type, email}) => {
+interface ChildProps {
+    reloadKey: number;
+}
+  
+const PeopleList: React.FC<ChildProps> = ({ reloadKey }) => {
   const [people, setPeople] = useState<Person[]>([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -17,7 +21,7 @@ const PeopleList: React.FC<Person> = ({name, situation, type, email}) => {
   useEffect(() => {
     fetchPeople();
     console.log("it fetched again")
-  }, [name, situation, type, email]);
+  }, [reloadKey]);
 
   const fetchPeople = async () => {
     try {
@@ -48,6 +52,7 @@ const PeopleList: React.FC<Person> = ({name, situation, type, email}) => {
             <TableRow>
                 <TableCell>ID</TableCell>
                 <TableCell>Nome</TableCell>
+                <TableCell>Telefone</TableCell>
                 <TableCell>Tipo</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Situação</TableCell>
@@ -58,6 +63,7 @@ const PeopleList: React.FC<Person> = ({name, situation, type, email}) => {
               <TableRow key={person.id}>
                 <TableCell>{person.id}</TableCell>
                 <TableCell>{person.name}</TableCell>
+                <TableCell>{person.phone}</TableCell>
                 <TableCell>{person.type}</TableCell>
                 <TableCell>{person.email}</TableCell>
                 <TableCell>{person.situation}</TableCell>
