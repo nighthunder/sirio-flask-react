@@ -3,8 +3,6 @@ import datetime
 from flask import Flask, request
 from flask import jsonify
 from flask_cors import CORS, cross_origin
-import logging
-
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
 
@@ -69,8 +67,8 @@ class User(db.Model):
 @dataclass
 class ProfessionalType(db.Model):
     id: int
-    situation: str
     description: str
+    situation: str
     createdAt: datetime.datetime
     updatedAt: datetime.datetime
 
@@ -80,7 +78,7 @@ class ProfessionalType(db.Model):
     createdAt = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updatedAt = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
-    def __init__(self, description, situation, createdAt = createdAt, updatedAt = updatedAt):
+    def __init__(self, situation, description, createdAt = createdAt, updatedAt = updatedAt):
         self.description = description
         self.situation = situation
         self.updatedAt = updatedAt

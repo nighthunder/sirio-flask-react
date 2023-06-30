@@ -1,6 +1,6 @@
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { CircularProgress, TextField, FormControl, InputLabel, Select, MenuItem, Stack, Button } from '@mui/material';
-import ProfessionalList from '../ProfessionalList/ProfessionalList';
+import ProfessionalTypeList from '../ProfessionalTypeList/ProfessionalTypeList';
 import '../../styles.css';
 import './styles.css';
 
@@ -10,26 +10,14 @@ interface ProfessionalType {
     situation: string;
 }
 
-interface Person {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  type: number | null;
-  situation: string ;
-}
-
 const Form: React.FC = () => {
   const [reloadKey, setReloadKey] = useState<number>(0);
   const [type, setType] = useState<ProfessionalType[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [formData, setFormData] = useState<Person>({
+  const [formData, setFormData] = useState<ProfessionalType>({
     id: 1,
-    name: '',
-    email: '',
-    phone: '',
-    situation: '',
-    type: null
+    description: '',
+    situation: ''
   });
 
   useEffect(() => {
@@ -60,7 +48,7 @@ const Form: React.FC = () => {
     console.log("dados", formData)
 
     try {
-      const response = await fetch('http://localhost:5000/types', {
+      const response = await fetch('http://localhost:5000/type', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -92,35 +80,9 @@ const Form: React.FC = () => {
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
             variant="outlined"
-            id="name" 
-            name="name"
-            label="Name" 
-            InputLabelProps={{ shrink: true }}
-            sx={{ flex: '1' }}
-            onChange={(e) => handleChange(e)}
-            />
-            <FormControl variant="outlined" sx={{ flex: '1' }}>
-            <InputLabel id="type-label">Tipo de profissional</InputLabel>
-            <Select id="type" name="type" labelId="type-label" label="Type" onChange={(e) => handleChange(e)}>
-                {type.map((t) => (
-                    <MenuItem key={t.id} value={t.id}>{t.id} - {t.description}</MenuItem>
-                ))}
-                </Select>
-            </FormControl>
-            <TextField
-            variant="outlined"
-            id="phone" 
-            name="phone"
-            label="Telefone" 
-            InputLabelProps={{ shrink: true }}
-            sx={{ flex: '1' }}
-            onChange={(e) => handleChange(e)}
-            />
-            <TextField
-            variant="outlined"
-            label="Email"
-            id="email" 
-            name="email"
+            id="description" 
+            name="description"
+            label="Description" 
             InputLabelProps={{ shrink: true }}
             sx={{ flex: '1' }}
             onChange={(e) => handleChange(e)}
@@ -142,7 +104,7 @@ const Form: React.FC = () => {
             <CircularProgress />
           </div>
         ) : (
-          <ProfessionalList reloadKey={reloadKey}></ProfessionalList>
+          <ProfessionalTypeList reloadKey={reloadKey}></ProfessionalTypeList>
         )}
     </>
   );

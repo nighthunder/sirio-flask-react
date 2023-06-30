@@ -21,7 +21,7 @@ USE `grafot76_sirio` ;
 -- Table `grafot76_sirio`.`professional_type`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `grafot76_sirio`.`professional_type` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `description` VARCHAR(45) NULL,
   `situation` VARCHAR(45) NULL,
   `updatedAt` DATETIME NULL,
@@ -34,12 +34,12 @@ ENGINE = InnoDB;
 -- Table `grafot76_sirio`.`user`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `grafot76_sirio`.`user` (
-  `id` INT NOT NULL,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `type` INT NOT NULL,
-  `email` VARCHAR(45) NULL,
-  `situation` VARCHAR(45) NULL,
   `name` VARCHAR(45) NULL,
   `phone` VARCHAR(45) NULL,
+  `email` VARCHAR(45) NULL,
+  `situation` VARCHAR(45) NULL,
   `updatedAt` DATETIME NULL,
   `createdAt` DATETIME NULL,
   PRIMARY KEY (`id`, `type`),
@@ -76,12 +76,12 @@ COMMIT;
 -- -----------------------------------------------------
 START TRANSACTION;
 USE `grafot76_sirio`;
-INSERT INTO `grafot76_sirio`.`user` (`id`, `type`, `situation`, `name`, `phone`, `email`, `updatedAt`, `createdAt`) VALUES (1, 1, 'maria.helena@sirio.com.br', 'ativo', 'Maria Helena Halls', '(11) 95905-7362', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-INSERT INTO `grafot76_sirio`.`user` (`id`, `type`, `situation`, `name`, `phone`, `email`, `updatedAt`, `createdAt`) VALUES (2, 2, 'juliana.anjos@sirio.com.br', 'inativo', 'Juliana dos Anjos', '(11) 98763-3466', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-INSERT INTO `grafot76_sirio`.`user` (`id`, `type`, `situation`, `name`, `phone`, `email`, `updatedAt`, `createdAt`) VALUES (3, 3, 'roberto.vital@sirio.com.br', 'ativo', 'Roberto dos Santos Vital', '(11) 98763-3466', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-INSERT INTO `grafot76_sirio`.`user` (`id`, `type`, `situation`, `name`, `phone`, `email`, `updatedAt`, `createdAt`) VALUES (4, 4, 'adriana.ferraz@sirio.com.br', 'ativo', 'Adriana Ferraz Albuquerque', '(11) 98763-3466', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-INSERT INTO `grafot76_sirio`.`user` (`id`, `type`, `situation`, `name`, `phone`, `email`, `updatedAt`, `createdAt`) VALUES (5, 5, 'eliz.socorro@sirio.com.br', 'inativo', 'Eliz Socorro da Ajuda', '(11) 98763-3466', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
-INSERT INTO `grafot76_sirio`.`user` (`id`, `type`, `situation`, `name`, `phone`, `email`, `updatedAt`, `createdAt`) VALUES (6, 6, 'thiago.augusto@sirio.com.br', 'inativo', 'Thiago Augusto da Silva', '(11) 98763-3466', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `grafot76_sirio`.`user` (`id`, `type`, `name`, `phone`, `email`, `situation`, `updatedAt`, `createdAt`) VALUES (1, 1, 'Maria Helena Halls', '(11) 95905-7362', 'maria.helena@sirio.com.br', 'ativo', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `grafot76_sirio`.`user` (`id`, `type`, `name`, `phone`, `email`, `situation`, `updatedAt`, `createdAt`) VALUES (2, 2, 'Juliana dos Anjos', '(11) 98763-3466', 'juliana.anjos@sirio.com.br', 'inativo', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `grafot76_sirio`.`user` (`id`, `type`, `name`, `phone`, `email`, `situation`, `updatedAt`, `createdAt`) VALUES (3, 3, 'Roberto dos Santos Vital', '(11) 98763-3466', 'roberto.vital@sirio.com.br', 'ativo', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `grafot76_sirio`.`user` (`id`, `type`, `name`, `phone`, `email`, `situation`, `updatedAt`, `createdAt`) VALUES (4, 4, 'Adriana Ferraz Albuquerque', '(11) 98763-3466', 'adriana.ferraz@sirio.com.br', 'ativo', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `grafot76_sirio`.`user` (`id`, `type`, `name`, `phone`, `email`, `situation`, `updatedAt`, `createdAt`) VALUES (5, 5, 'Eliz Socorro da Ajuda', '(11) 98763-3466', 'eliz.socorro@sirio.com.br', 'inativo', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
+INSERT INTO `grafot76_sirio`.`user` (`id`, `type`, `name`, `phone`, `email`, `situation`, `updatedAt`, `createdAt`) VALUES (6, 6, 'Thiago Augusto da Silva', '(11) 98763-3466', 'thiago.augusto@sirio.com.br', 'inativo', '0000-00-00 00:00:00', '0000-00-00 00:00:00');
 
 COMMIT;
 
