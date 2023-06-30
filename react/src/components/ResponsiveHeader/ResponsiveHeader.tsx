@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'
+import {  BrowserRouter as Router, Route, Routes  } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -16,6 +18,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import HomeIcon from '@mui/icons-material/Home';
 import InfoIcon from '@mui/icons-material/Info';
 import ContactMailIcon from '@mui/icons-material/ContactMail';
+import './styles.css';
 
 const Header: React.FC = () => {
   const theme = useTheme();
@@ -44,19 +47,21 @@ const Header: React.FC = () => {
           <MenuIcon />
         </IconButton>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          Painel de gerenciamento de usuários
+          Dashboard de gerenciamento
         </Typography>
         {isSmallScreen ? (
           <Box sx={{ display: 'none' }}>
-            <Button color="inherit">Home</Button>
-            <Button color="inherit">About</Button>
-            <Button color="inherit">Contact</Button>
+              <Link to="/add-profissional"><Button color="inherit">Gerenciar profissionais</Button></Link>
+              <Link to="/add-type"><Button color="inherit">Gerenciar tipos</Button></Link>
+              <Button color="inherit">About</Button>
+              <Button color="inherit">Contact</Button>
           </Box>
         ) : (
           <Box sx={{ display: 'flex' }}>
-            <Button color="inherit">Início</Button>
-            <Button color="inherit">Configurações</Button>
-            <Button color="inherit">Sair</Button>
+              <Link to="/add-professional"><Button color="inherit">Gerenciar profissionais</Button></Link>
+              <Link to="/add-type"><Button color="inherit">Gerenciar tipos</Button></Link>
+              <Button color="inherit">Configurações</Button>
+              <Button color="inherit">Sair</Button>
           </Box>
         )}
       </Toolbar>

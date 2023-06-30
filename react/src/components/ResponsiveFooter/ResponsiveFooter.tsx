@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItem, ListItemText } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
+import './styles.css';
 
 const useStyles = {
   footer: {

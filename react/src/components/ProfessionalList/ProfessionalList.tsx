@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TablePagination } from '@mui/material';
-import '../styles.css';
+import '../../styles.css';
+import './styles.css';
+
 interface Person {
     id: number;
     name: string;
@@ -50,12 +52,12 @@ const PeopleList: React.FC<ChildProps> = ({ reloadKey }) => {
         <Table>
           <TableHead>
             <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Nome</TableCell>
-                <TableCell>Telefone</TableCell>
-                <TableCell>Tipo</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Situação</TableCell>
+                <TableCell>ID:</TableCell>
+                <TableCell>Nome:</TableCell>
+                <TableCell>Telefone:</TableCell>
+                <TableCell>Tipo:</TableCell>
+                <TableCell>Email:</TableCell>
+                <TableCell>Situação:</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

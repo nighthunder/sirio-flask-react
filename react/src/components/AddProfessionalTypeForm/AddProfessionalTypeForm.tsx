@@ -1,7 +1,8 @@
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { CircularProgress, TextField, FormControl, InputLabel, Select, MenuItem, Stack, Button } from '@mui/material';
-import ProfessionalList from './ProfessionalList';
-import '../styles.css';
+import ProfessionalList from '../ProfessionalList/ProfessionalList';
+import '../../styles.css';
+import './styles.css';
 
 interface ProfessionalType {
     id: number;
@@ -59,7 +60,7 @@ const Form: React.FC = () => {
     console.log("dados", formData)
 
     try {
-      const response = await fetch('http://localhost:5000/user', {
+      const response = await fetch('http://localhost:5000/types', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
