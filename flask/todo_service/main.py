@@ -5,19 +5,22 @@ from flask import jsonify
 from flask_cors import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql import func
+from dotenv import load_dotenv
+import os
 
 app = Flask(__name__)
 CORS(app)
 app.run(debug=True)
+load_dotenv()
 
 # create the extension
 db = SQLAlchemy()
 
 # Make the connection
-host = "grafothinker.com.br"
-user = "grafot76_flymaya"
-passwd = "vD92J0J#5Pcb"
-database = "grafot76_sirio"
+host = os.getenv('DATABASE_URL')
+user = os.getenv('DATABASE_USER')
+passwd = os.getenv('DATABASE_PASSWD')
+database = os.getenv('DATABASE_DB')
 
 # configure the SQLite database, relative to the app instance folder
 app.config["SQLALCHEMY_DATABASE_URI"] = "mysql+pymysql://{}:{}@{}/{}".format(user,passwd,host,database)
