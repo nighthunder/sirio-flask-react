@@ -1,9 +1,11 @@
 from mysql.connector import connect, Error
+from dotenv import load_dotenv
 
-host = "grafothinker.com.br"
-user = "grafot76_flymaya"
-passwd = "vD92J0J#5Pcb"
-db = "grafot76_sirio"
+# Make the connection
+host = os.getenv('DATABASE_URL')
+user = os.getenv('DATABASE_USER')
+passwd = os.getenv('DATABASE_PASSWD')
+database = os.getenv('DATABASE_DB')
 
 def get_db_connection():
     try:
