@@ -81,7 +81,7 @@ class ProfessionalType(db.Model):
     createdAt = db.Column(db.DateTime(timezone=True), server_default=func.now())
     updatedAt = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
-    def __init__(self, situation, description, createdAt = createdAt, updatedAt = updatedAt):
+    def __init__(self, description, situation, createdAt = createdAt, updatedAt = updatedAt):
         self.description = description
         self.situation = situation
         self.updatedAt = updatedAt
