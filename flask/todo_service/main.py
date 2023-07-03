@@ -142,3 +142,26 @@ def postType():
     db.session.commit()
     return jsonify({'success': 'ok'})
 
+@app.route('/update_professional_type',methods=['POST'])
+@cross_origin(origin='*')
+def postProfessionalType():
+    if request.headers['Content-Type'] != 'application/json':
+        return 'Invalid Content-Type', 400
+
+    data = request.get_json()
+    # Now you can access the data in the request body
+    
+    # Example: accessing a specific field in the JSON data
+    user_type_id = data.get('type')
+    user_id = data.get('id')
+    createdAt = datetime.datetime.now()
+    updatedAt = datetime.datetime.now()
+
+    user = User.query.get(user_id)
+
+    if user:
+        user.type = user_type_id 
+        db.session.commit()
+        return 'User updated successfully'
+
+    return 'User not found', 404
