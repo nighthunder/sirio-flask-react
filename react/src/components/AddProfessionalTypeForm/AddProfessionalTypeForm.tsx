@@ -19,6 +19,7 @@ const Form: React.FC = () => {
     description: '',
     situation: ''
   });
+  const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
     fetchType();
@@ -46,6 +47,25 @@ const Form: React.FC = () => {
     e.preventDefault();
 
     console.log("dados", formData)
+
+    const { description, situation } = formData;
+    const newErrors: string[] = [];
+    let gotError : boolean = false;
+
+    if (!description.trim()) {
+      newErrors.push('A descrição é obrigatória.');
+      gotError = true;
+    }
+    if (!situation.trim()) {
+      newErrors.push('A situação é requerida.');
+      gotError = true;
+    }
+
+    setErrors(newErrors);
+
+    if (gotError){
+      return;
+    }
 
     try {
       const response = await fetch('http://localhost:5000/type', {
@@ -82,10 +102,12 @@ const Form: React.FC = () => {
             variant="outlined"
             id="description" 
             name="description"
-            label="Description" 
+            label="Descrição" 
+            value={formData.description}
             InputLabelProps={{ shrink: true }}
             sx={{ flex: '1' }}
-            onChange={(e) => handleChange(e)}
+            onChange={(e) => handleChange(e) 
+            }
             />
             <FormControl variant="outlined" sx={{ flex: '1' }}>
             <InputLabel id="type-situation">Situação</InputLabel>
@@ -99,6 +121,15 @@ const Form: React.FC = () => {
             </Button>
         </Stack>
         </form>
+        {errors.length > 0 && (
+          <div>
+            <div className='error'>
+              {errors.map((error, index) => (
+                <span key={index}>{error}&nbsp;</span>
+              ))}
+            </div>
+          </div>
+        )}
         {isLoading ? (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40vh'}}>
             <CircularProgress />
@@ -106,6 +137,7 @@ const Form: React.FC = () => {
         ) : (
           <ProfessionalTypeList reloadKey={reloadKey}></ProfessionalTypeList>
         )}
+        
     </>
   );
 };

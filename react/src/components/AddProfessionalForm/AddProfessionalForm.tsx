@@ -31,6 +31,7 @@ const Form: React.FC = () => {
     situation: '',
     type: null
   });
+  const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
     fetchType();
@@ -58,6 +59,37 @@ const Form: React.FC = () => {
     e.preventDefault();
 
     console.log("dados", formData)
+
+    const { name, email, phone, situation, type } = formData;
+    const newErrors: string[] = [];
+    let gotError : boolean = false;
+
+    if (!name.trim()) {
+      newErrors.push('Nome é obrigatório.');
+      gotError = true;
+    }
+    if (!email.trim()) {
+      newErrors.push('Email é obrigatório.');
+      gotError = true;
+    }
+    if (!phone.trim()) {
+      newErrors.push('Telefone é obrigatório.');
+      gotError = true;
+    }
+    if (!situation.trim()) {
+      newErrors.push('Situação é obrigatório.');
+      gotError = true;
+    }
+    if (!(typeof type === 'number')) {
+      newErrors.push('Tipo de profissional é obrigatório.');
+      gotError = true;
+    }
+
+    setErrors(newErrors);
+
+    if (gotError){
+      return;
+    }
 
     try {
       const response = await fetch('http://localhost:5000/user', {
@@ -94,7 +126,8 @@ const Form: React.FC = () => {
             variant="outlined"
             id="name" 
             name="name"
-            label="Name" 
+            label="Nome completo" 
+            value = {formData.name}
             InputLabelProps={{ shrink: true }}
             sx={{ flex: '1' }}
             onChange={(e) => handleChange(e)}
@@ -112,6 +145,8 @@ const Form: React.FC = () => {
             id="phone" 
             name="phone"
             label="Telefone" 
+            placeholder="(XX) XXXX-XXXX"
+            value = {formData.phone}
             InputLabelProps={{ shrink: true }}
             sx={{ flex: '1' }}
             onChange={(e) => handleChange(e)}
@@ -121,6 +156,8 @@ const Form: React.FC = () => {
             label="Email"
             id="email" 
             name="email"
+            value = {formData.email}
+            placeholder="meuemail@sirio.com.br"
             InputLabelProps={{ shrink: true }}
             sx={{ flex: '1' }}
             onChange={(e) => handleChange(e)}
@@ -137,6 +174,15 @@ const Form: React.FC = () => {
             </Button>
         </Stack>
         </form>
+        {errors.length > 0 && (
+          <div>
+            <div className='error'>
+              {errors.map((error, index) => (
+                <span key={index}>{error}&nbsp;</span>
+              ))}
+            </div>
+          </div>
+        )}
         {isLoading ? (
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '40vh'}}>
             <CircularProgress />

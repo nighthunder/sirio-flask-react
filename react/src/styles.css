@@ -24,3 +24,12 @@ tr:hover{
 a:active, a:visited, a:link{
     color: #fff;
 }
+
+.error{
+    color: red;
+    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-size: 0.95em;
+    line-height: 1.6;
+    letter-spacing: 0.0075em;
+    -webkit-box-flex: 1;
+}
