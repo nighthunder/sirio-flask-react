@@ -96,15 +96,34 @@ class UserType(db.Model):
 # Create all models
 # db.create_all()
 
-@app.route('/user',methods=['GET'])
+@dataclass
+class Situation(db.Model):
+    id: int
+    description: str
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    description = db.Column(db.String, unique=True, nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
+
+    def __init__(self, description, created_at = created_at, updated_at = updated_at):
+        self.description = description
+        self.updated_at = updated_at
+        self.created_at = created_at
+
+@app.route('/users',methods=['GET'])
 def getProfessional():
-    return  jsonify(User.query.all()) 
+    response = jsonify(User.query.all()) 
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response;
 
 @app.route('/user',methods=['POST'])
 @cross_origin(origin='*')
-def postProfessional():
-    if request.headers['Content-Type'] != 'application/json':
-        return 'Invalid Content-Type', 400
+def postUser():
+    '''if request.headers['Content-Type'] != 'application/json':
+        return 'Invalid Content-Type', 400'''
 
     data = request.get_json()
     # Now you can access the data in the request body
@@ -118,20 +137,20 @@ def postProfessional():
     situation = data.get('situation')
     created_at = datetime.datetime.now()
     updated_at = datetime.datetime.now()
-    me = User(type, firstname, lastname, situation, email, phone, created_at, updated_at)
+    me = User(type, firstname, lastname, phone, email, situation, created_at, updated_at)
     db.session.add(me) 
     db.session.commit()
     return jsonify({'success': 'ok'})
 
-@app.route('/type',methods=['GET'])
+@app.route('/types',methods=['GET'])
 def getType():
     return  jsonify(UserType.query.all()) 
 
 @app.route('/type',methods=['POST'])
 @cross_origin(origin='*')
 def postType():
-    if request.headers['Content-Type'] != 'application/json':
-        return 'Invalid Content-Type', 400
+    '''if request.headers['Content-Type'] != 'application/json':
+        return 'Invalid Content-Type', 400'''
 
     data = request.get_json()
     # Now you can access the data in the request body
@@ -146,7 +165,29 @@ def postType():
     db.session.commit()
     return jsonify({'success': 'ok'})
 
-@app.route('/update_user_type',methods=['POST'])
+@app.route('/situations',methods=['GET'])
+def getSituations():
+    return  jsonify(Situation.query.all()) 
+
+@app.route('/situation',methods=['POST'])
+@cross_origin(origin='*')
+def postSituation():
+    '''if request.headers['Content-Type'] != 'application/json':
+        return 'Invalid Content-Type', 400'''
+
+    data = request.get_json()
+    # Now you can access the data in the request body
+    
+    # Example: accessing a specific field in the JSON data
+    description = data.get('description')
+    created_at = datetime.datetime.now()
+    updated_at = datetime.datetime.now()
+    me = Situation(description, created_at, updated_at)
+    db.session.add(me) 
+    db.session.commit()
+    return jsonify({'success': 'ok'})
+
+@app.route('/user_type',methods=['POST'])
 @cross_origin(origin='*')
 def postUserType():
     if request.headers['Content-Type'] != 'application/json':

@@ -28,7 +28,7 @@ const ListUsers: React.FC<ChildProps> = ({ reloadKey }) => {
 
   const fetchPeople = async () => {
     try {
-      await api.get('/users').then(response => {
+      await api.get('/users',).then(response => {
         console.log( "Users:"+ response.data);
         const data = response.data
         setUsers(data);
