@@ -1,16 +1,20 @@
 import React from "react";
 import { Route, Routes, BrowserRouter  } from "react-router-dom";
 
-import AddProfessional from "./AddProfessional/AddProfessional";
-import AddProfessionalType from "./AddProfessionalType/AddProfessionalType";
+import AddUser from "../pages/AddUser/AddUser";
+import AddSituation from "../pages/AddSituation/AddSituation";
+import AddUsersType from "../pages/AddUsersType/AddUsersType";
 
 const AppRoutes: React.FC = () => {
     return (
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<AddProfessional />} />
-          <Route path="/add-professional" element={<AddProfessional />} />
-          <Route path="/add-type" element={<AddProfessionalType />} />
+          <Route path="/" element={<AddUser />} />
+          <Route path="/add-situation" element={<AddSituation />} />
+          <Route path="/add-user" element={<AddUser />} />
+          <Route path="/add-type" element={<AddUsersType />} />
+          <Route path="/login" element={<AddUser />} />
+          <Route path="/loggout" element={<AddUser />} />
         </Routes>
       </BrowserRouter>
     );

@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 host = os.getenv('DATABASE_URL')
 user = os.getenv('DATABASE_USER')
 passwd = os.getenv('DATABASE_PASSWD')
-database = os.getenv('DATABASE_DB')
+db= os.getenv('DATABASE_DB')
 
 def get_db_connection():
     try:
@@ -13,6 +13,7 @@ def get_db_connection():
             host=host,
             user=user,
             password=passwd,
+            port=3307,
             database=db,
             connect_timeout=300000
         ) as connection:

@@ -1,50 +1,63 @@
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { CircularProgress, TextField, FormControl, InputLabel, Select, MenuItem, Stack, Button } from '@mui/material';
-import ProfessionalList from '../ProfessionalList/ProfessionalList';
+import ListUsers from '../ListUsers/ListUsers';
 import '../../styles.css';
 import './styles.css';
-
-interface ProfessionalType {
-    id: number;
-    description: string;
-    situation: string;
-}
-
-interface Person {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  type: number | null;
-  situation: string ;
-}
+import api from '../../services/api';
+import  { User } from "../../types/User";
+import  { UserType } from "../../types/UserType";
+import  { Situation } from "../../types/Situation";
 
 const Form: React.FC = () => {
   const [reloadKey, setReloadKey] = useState<number>(0);
-  const [type, setType] = useState<ProfessionalType[]>([]);
+  const [type, setType] = useState<UserType[]>([]);
+  const [situations, setSituations] = useState<Situation>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [formData, setFormData] = useState<Person>({
+  const [formData, setFormData] = useState<User>({
     id: 1,
-    name: '',
+    firstname: '',
+    lastname: '',
     email: '',
     phone: '',
     situation: '',
-    type: null
+    type: null,
   });
   const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
     fetchType();
+    fetchSituations();
   }, []);
 
   const fetchType = async () => {
     try {
-      const response = await fetch('http://localhost:5000/type');
-      const data = await response.json();
-      setType(data);
+      await api.get('/types').then(response => {
+        //console.log(response.data);
+        const data = response.data;
+        setType(data); 
+      }).catch(error => {
+        console.error(error);
+      });
+      
     } catch (error) {
-      console.error('Error fetching people:', error);
+      console.error('Error fetching types:', error);
     }
+  };
+
+  const fetchSituations = async () => {
+    try {
+      await api.get('/situations').then(response => {
+        //console.log(response.data);
+        const data = response.data;
+        setSituations(data); 
+      }).catch(error => {
+        console.error(error);
+      });
+      
+    } catch (error) {
+      console.error('Error fetching situations:', error);
+    }
+
   };
 
   const handleChange = (e: any) => {
@@ -60,28 +73,32 @@ const Form: React.FC = () => {
 
     console.log("dados", formData)
 
-    const { name, email, phone, situation, type } = formData;
+    const { firstname, lastname, email, phone, situation, type } = formData;
     const newErrors: string[] = [];
     let gotError : boolean = false;
 
-    if (!name.trim()) {
-      newErrors.push('Nome é obrigatório.');
+    if (!firstname.trim()) {
+      newErrors.push('First name is mandatory.');
+      gotError = true;
+    }
+    if (!lastname.trim()) {
+      newErrors.push('Last name is mandatory.');
       gotError = true;
     }
     if (!email.trim()) {
-      newErrors.push('Email é obrigatório.');
+      newErrors.push('Email is mandatory.');
       gotError = true;
     }
     if (!phone.trim()) {
-      newErrors.push('Telefone é obrigatório.');
+      newErrors.push('Phone is mandatory.');
       gotError = true;
     }
-    if (!situation.trim()) {
-      newErrors.push('Situação é obrigatório.');
+    if (!(typeof situation === 'number')) {
+      newErrors.push('Situation is mandatory.');
       gotError = true;
     }
     if (!(typeof type === 'number')) {
-      newErrors.push('Tipo de profissional é obrigatório.');
+      newErrors.push('Professional type is mandatory.');
       gotError = true;
     }
 
@@ -92,27 +109,21 @@ const Form: React.FC = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/user', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        // Handle successful response
-        console.log('Form submitted successfully');
+      await api.post('/user', JSON.stringify(formData)).then(response => {
+        console.log(response.data);
+        const data = response.data;
+        //setUsers(data); 
+        
+        //console.log('Form submitted successfully');
         setIsLoading(true);
         setReloadKey(prevKey => prevKey + 1);
         setTimeout(() => {
           setIsLoading(false);
         }, 1000); // 10 seconds
-
-      } else {
-        // Handle error response
-        console.error('Failed to submit form');
-      }
+      }).catch(error => {
+        console.error(error);
+      });
+      
     } catch (error) {
       console.error('An error occurred', error);
     } 
@@ -124,19 +135,29 @@ const Form: React.FC = () => {
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField
             variant="outlined"
-            id="name" 
-            name="name"
-            label="Nome completo" 
-            value = {formData.name}
+            id="firstname" 
+            name="firstname"
+            label="First name" 
+            value = {formData.firstname}
+            InputLabelProps={{ shrink: true }}
+            sx={{ flex: '1' }}
+            onChange={(e) => handleChange(e)}
+            />
+            <TextField
+            variant="outlined"
+            id="lastname" 
+            name="lastname"
+            label="Last name" 
+            value = {formData.lastname}
             InputLabelProps={{ shrink: true }}
             sx={{ flex: '1' }}
             onChange={(e) => handleChange(e)}
             />
             <FormControl variant="outlined" sx={{ flex: '1' }}>
-            <InputLabel id="type-label">Tipo de profissional</InputLabel>
+            <InputLabel id="type-label">User class:</InputLabel>
             <Select id="type" name="type" labelId="type-label" label="Type" onChange={(e) => handleChange(e)}>
                 {type.map((t) => (
-                    <MenuItem key={t.id} value={t.id}>{t.id} - {t.description}</MenuItem>
+                    <MenuItem key={t.id} value={t.id}>{t.description}</MenuItem>
                 ))}
                 </Select>
             </FormControl>
@@ -144,7 +165,7 @@ const Form: React.FC = () => {
             variant="outlined"
             id="phone" 
             name="phone"
-            label="Telefone" 
+            label="Phone" 
             placeholder="(XX) XXXX-XXXX"
             value = {formData.phone}
             InputLabelProps={{ shrink: true }}
@@ -157,20 +178,21 @@ const Form: React.FC = () => {
             id="email" 
             name="email"
             value = {formData.email}
-            placeholder="meuemail@sirio.com.br"
+            placeholder="meuemail@domain.com.br"
             InputLabelProps={{ shrink: true }}
             sx={{ flex: '1' }}
             onChange={(e) => handleChange(e)}
             />
             <FormControl variant="outlined" sx={{ flex: '1' }}>
-            <InputLabel id="type-situation">Situação</InputLabel>
+            <InputLabel id="type-situation">Situation</InputLabel>
             <Select id="situation" name="situation" labelId="type-situation" label="Situation" onChange={(e) => handleChange(e)}>
-                <MenuItem key="ativo" value="ativo">1 - ativo</MenuItem>
-                <MenuItem key="inativo" value="inativo">2 - inativo</MenuItem>
+                {situations?.map((situation: any) => (
+                  <MenuItem key={situation.id} value={situation.id}>{situation.description}&nbsp;</MenuItem>
+                ))}
             </Select>
             </FormControl>
             <Button type="submit" variant="contained" color="primary" size="large" sx={{ flex: '1' }}>
-            Adicionar
+            Add
             </Button>
         </Stack>
         </form>
@@ -188,7 +210,7 @@ const Form: React.FC = () => {
             <CircularProgress />
           </div>
         ) : (
-          <ProfessionalList reloadKey={reloadKey}></ProfessionalList>
+          <ListUsers reloadKey={reloadKey}></ListUsers>
         )}
     </>
   );

@@ -30,65 +30,68 @@ db.init_app(app)
 @dataclass
 class User(db.Model):
     id: int
-    name: str
+    firstname: str
+    lastname: str
     phone: str
     situation: str
     type: int
     email: str
-    createdAt: datetime.datetime
-    updatedAt: datetime.datetime
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name= db.Column(db.String, unique=True, nullable=False)
+    firstname= db.Column(db.String, unique=True, nullable=False)
+    lastname= db.Column(db.String, unique=True, nullable=False)
     situation = db.Column(db.String, nullable=False)
-    type = db.Column(db.Integer, db.ForeignKey('professional_type.id'), nullable=False)
+    type = db.Column(db.Integer, db.ForeignKey('user_type.id'), nullable=False)
     email = db.Column(db.String)
     phone = db.Column(db.String)
-    createdAt = db.Column(db.DateTime(timezone=True), server_default=func.now())
-    updatedAt = db.Column(db.DateTime(timezone=True), onupdate=func.now())
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
-    def __init__(self, type, name, phone, email, situation, createdAt = createdAt, updatedAt = updatedAt):
+    def __init__(self, type, firstname, lastname, phone, email, situation, created_at = created_at, updated_at = updated_at):
         self.type = type
         self.email = email
         self.situation = situation
-        self.name = name
+        self.firstname = firstname
+        self.lastname = lastname
         self.phone = phone
-        self.createdAt = createdAt
-        self.updatedAt = updatedAt
+        self.created_at = created_at
+        self.updated_at = updated_at
 
     def __repr__(self):
         return '<User %r>' % self.name
     
     def serialize(self):
         return {"id": self.id,
-                "name": self.name,
+                "name": self.firstname + self.lastname,
                 "situation": self.situation,
                 "type": self.type,
                 "email": self.email,
                 }
 
 @dataclass
-class ProfessionalType(db.Model):
+class UserType(db.Model):
     id: int
     description: str
     situation: str
-    createdAt: datetime.datetime
-    updatedAt: datetime.datetime
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     description = db.Column(db.String, unique=True, nullable=False)
     situation = db.Column(db.String, nullable=False)
-    createdAt = db.Column(db.DateTime(timezone=True), server_default=func.now())
-    updatedAt = db.Column(db.DateTime(timezone=True), onupdate=func.now())
+    created_at = db.Column(db.DateTime(timezone=True), server_default=func.now())
+    updated_at = db.Column(db.DateTime(timezone=True), onupdate=func.now())
 
-    def __init__(self, description, situation, createdAt = createdAt, updatedAt = updatedAt):
+    def __init__(self, description, situation, created_at = created_at, updated_at = updated_at):
         self.description = description
         self.situation = situation
-        self.updatedAt = updatedAt
-        self.createdAt = createdAt
+        self.updated_at = updated_at
+        self.created_at = created_at
 
     def __repr__(self):
-        return '<ProfessionalType %r>' % self.description
+        return '<UserType %r>' % self.description
     
 # Create all models
 # db.create_all()
@@ -107,21 +110,22 @@ def postProfessional():
     # Now you can access the data in the request body
     
     # Example: accessing a specific field in the JSON data
-    name = data.get('name')
+    firstname = data.get('firstname')
+    lastname = data.get('lastname')
     email = data.get('email')
     phone = data.get('phone')
     type = data.get('type')
     situation = data.get('situation')
-    createdAt = datetime.datetime.now()
-    updatedAt = datetime.datetime.now()
-    me = User(type, name, phone, email, situation, createdAt, updatedAt)
+    created_at = datetime.datetime.now()
+    updated_at = datetime.datetime.now()
+    me = User(type, firstname, lastname, situation, email, phone, created_at, updated_at)
     db.session.add(me) 
     db.session.commit()
     return jsonify({'success': 'ok'})
 
 @app.route('/type',methods=['GET'])
 def getType():
-    return  jsonify(ProfessionalType.query.all()) 
+    return  jsonify(UserType.query.all()) 
 
 @app.route('/type',methods=['POST'])
 @cross_origin(origin='*')
@@ -135,16 +139,16 @@ def postType():
     # Example: accessing a specific field in the JSON data
     description = data.get('description')
     situation = data.get('situation')
-    createdAt = datetime.datetime.now()
-    updatedAt = datetime.datetime.now()
-    me = ProfessionalType(description, situation, createdAt, updatedAt)
+    created_at = datetime.datetime.now()
+    updated_at = datetime.datetime.now()
+    me = UserType(description, situation, created_at, updated_at)
     db.session.add(me) 
     db.session.commit()
     return jsonify({'success': 'ok'})
 
-@app.route('/update_professional_type',methods=['POST'])
+@app.route('/update_user_type',methods=['POST'])
 @cross_origin(origin='*')
-def postProfessionalType():
+def postUserType():
     if request.headers['Content-Type'] != 'application/json':
         return 'Invalid Content-Type', 400
 
@@ -154,8 +158,8 @@ def postProfessionalType():
     # Example: accessing a specific field in the JSON data
     user_type_id = data.get('type')
     user_id = data.get('id')
-    createdAt = datetime.datetime.now()
-    updatedAt = datetime.datetime.now()
+    created_at = datetime.datetime.now()
+    updated_at = datetime.datetime.now()
 
     user = User.query.get(user_id)
 

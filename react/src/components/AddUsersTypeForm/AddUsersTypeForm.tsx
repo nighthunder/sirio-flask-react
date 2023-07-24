@@ -1,20 +1,18 @@
 import React, { useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { CircularProgress, TextField, FormControl, InputLabel, Select, MenuItem, Stack, Button } from '@mui/material';
-import ProfessionalTypeList from '../ProfessionalTypeList/ProfessionalTypeList';
+import ListUsersTypes from '../ListUsersTypes/ListUsersTypes';
+import { Situation } from '../../types/Situation';
+import { UserType } from '../../types/UserType';
 import '../../styles.css';
 import './styles.css';
-
-interface ProfessionalType {
-    id: number;
-    description: string;
-    situation: string;
-}
+import api from '../../services/api';
 
 const Form: React.FC = () => {
   const [reloadKey, setReloadKey] = useState<number>(0);
-  const [type, setType] = useState<ProfessionalType[]>([]);
+  const [type, setType] = useState<UserType[]>([]);
+  const [situations, setSituations] = useState<Situation>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [formData, setFormData] = useState<ProfessionalType>({
+  const [formData, setFormData] = useState<UserType>({
     id: 1,
     description: '',
     situation: ''
@@ -23,16 +21,37 @@ const Form: React.FC = () => {
 
   useEffect(() => {
     fetchType();
+    fetchSituations();
   }, []);
 
   const fetchType = async () => {
     try {
-      const response = await fetch('http://localhost:5000/type');
-      const data = await response.json();
-      setType(data);
+      await api.get('/types').then(response => {
+        console.log(response.data);
+        const data = response.data;
+        setType(data); 
+      }).catch(error => {
+        console.error(error);
+      });
     } catch (error) {
       console.error('Error fetching people:', error);
     }
+  };
+
+  const fetchSituations = async () => {
+    try {
+      await api.get('/situations').then(response => {
+        console.log(response.data);
+        const data = response.data;
+        setSituations(data); 
+      }).catch(error => {
+        console.error(error);
+      });
+      
+    } catch (error) {
+      console.error('Error fetching situations:', error);
+    }
+
   };
 
   const handleChange = (e: any) => {
@@ -53,11 +72,12 @@ const Form: React.FC = () => {
     let gotError : boolean = false;
 
     if (!description.trim()) {
-      newErrors.push('A descrição é obrigatória.');
+      newErrors.push('Description is mandatory.');
       gotError = true;
     }
-    if (!situation.trim()) {
-      newErrors.push('A situação é requerida.');
+
+    if (!(typeof situation === 'number')) {
+      newErrors.push('Situation is mandatory.');
       gotError = true;
     }
 
@@ -68,15 +88,9 @@ const Form: React.FC = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/type', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
+      await api.post('/type', JSON.stringify(formData)).then(response => {
+        console.log(response.data);
+        const data = response.data;
         // Handle successful response
         console.log('Form submitted successfully');
         setIsLoading(true);
@@ -84,11 +98,14 @@ const Form: React.FC = () => {
         setTimeout(() => {
           setIsLoading(false);
         }, 1000); // 10 seconds
+      }).catch(error => {
+        console.error(error);
+      });
 
-      } else {
-        // Handle error response
-        console.error('Failed to submit form');
-      }
+    
+ 
+
+
     } catch (error) {
       console.error('An error occurred', error);
     } 
@@ -102,7 +119,7 @@ const Form: React.FC = () => {
             variant="outlined"
             id="description" 
             name="description"
-            label="Descrição" 
+            label="Description" 
             value={formData.description}
             InputLabelProps={{ shrink: true }}
             sx={{ flex: '1' }}
@@ -110,14 +127,15 @@ const Form: React.FC = () => {
             }
             />
             <FormControl variant="outlined" sx={{ flex: '1' }}>
-            <InputLabel id="type-situation">Situação</InputLabel>
+            <InputLabel id="type-situation">Situation</InputLabel>
             <Select id="situation" name="situation" labelId="type-situation" label="Situation" onChange={(e) => handleChange(e)}>
-                <MenuItem key="ativo" value="ativo">1 - ativo</MenuItem>
-                <MenuItem key="inativo" value="inativo">2 - inativo</MenuItem>
+              {situations?.map((situation: any) => (
+                <MenuItem key={situation.id} value={situation.id}>{situation.description}&nbsp;</MenuItem>
+              ))}
             </Select>
             </FormControl>
             <Button type="submit" variant="contained" color="primary" size="large" sx={{ flex: '1' }}>
-            Adicionar
+            Add
             </Button>
         </Stack>
         </form>
@@ -135,7 +153,7 @@ const Form: React.FC = () => {
             <CircularProgress />
           </div>
         ) : (
-          <ProfessionalTypeList reloadKey={reloadKey}></ProfessionalTypeList>
+          <ListUsersTypes reloadKey={reloadKey}></ListUsersTypes>
         )}
         
     </>
